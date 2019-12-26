@@ -13,7 +13,7 @@ public class ProductionException extends RuntimeException {
 
     private String message;
 
-    public ProductionException(ResultEnum resultEnum){
+    public ProductionException(ResultEnum resultEnum) {
         super(resultEnum.getMessage());
         this.code = resultEnum.getCode();
     }

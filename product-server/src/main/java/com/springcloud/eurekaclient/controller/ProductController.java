@@ -27,6 +27,7 @@ public class ProductController {
 
     @Autowired
     private ProductSevice productSevice;
+
     /**
      * 1.查询所有在架商品
      * 2.获取类目type列表
@@ -34,21 +35,21 @@ public class ProductController {
      * 4.构造数据
      */
     @GetMapping("/list")
-    public List<ProductVO> list(){
-        List<ProductInfo> productInfoList =  productSevice.findUpAll();
+    public List<ProductVO> list() {
+        List<ProductInfo> productInfoList = productSevice.findUpAll();
         List<Integer> categoryTypeList = productInfoList.stream()
                 .map(ProductInfo::getCategoryType).collect(Collectors.toList());
         List<ProductCategory> productCategoryList = productSevice.findByCategoryTypeIn(categoryTypeList);
         List<ProductVO> productVOList = new ArrayList<>();
-        for(ProductCategory productCategory : productCategoryList){
+        for (ProductCategory productCategory : productCategoryList) {
             ProductVO productVO = new ProductVO();
             productVO.setCategoryName(productCategory.getCategoryName());
             productVO.setCategoryType(productCategory.getCategoryType());
             List<ProductInfoVO> productInfoVOList = new ArrayList<>();
-            for(ProductInfo productInfo : productInfoList){
-                if(productInfo.getCategoryType().equals(productCategory.getCategoryType())){
+            for (ProductInfo productInfo : productInfoList) {
+                if (productInfo.getCategoryType().equals(productCategory.getCategoryType())) {
                     ProductInfoVO productInfoVO = new ProductInfoVO();
-                    BeanUtils.copyProperties(productInfo,productInfoVO);
+                    BeanUtils.copyProperties(productInfo, productInfoVO);
                     productInfoVOList.add(productInfoVO);
                 }
             }
@@ -62,20 +63,22 @@ public class ProductController {
     /**
      * 获取商品列表（给订单服务使用）
      * 注意：当参数使用@RequestBody时，请求一定要使用post，当无参或单参数、@RequestParam、@PathVariable时可以用get
+     *
      * @param productIdList
      * @return
      */
     @PostMapping("/listForOrder")
-    public List<ProductInfoOutput> listForOrder(@RequestBody List<String> productIdList){
+    public List<ProductInfoOutput> listForOrder(@RequestBody List<String> productIdList) {
         return productSevice.findByProductIdIn(productIdList);
     }
 
     /**
      * 扣库存
+     *
      * @param decreaseStockInputList
      */
     @PostMapping("/decreaseStock")
-    public void decreaseStock(@RequestBody List<DecreaseStockInput> decreaseStockInputList){
+    public void decreaseStock(@RequestBody List<DecreaseStockInput> decreaseStockInputList) {
         productSevice.decreaseStock(decreaseStockInputList);
     }
 }

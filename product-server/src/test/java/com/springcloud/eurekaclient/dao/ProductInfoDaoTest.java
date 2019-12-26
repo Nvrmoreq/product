@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 public class ProductInfoDaoTest {
 
     @Autowired
-    private  ProductInfoDao productInfoDao;
+    private ProductInfoDao productInfoDao;
 
     @Autowired
     private ProductSevice productSevice;
@@ -44,7 +44,7 @@ public class ProductInfoDaoTest {
     }
 
     @Test
-    public void decreaseStock() throws Exception{
+    public void decreaseStock() throws Exception {
         /*CartVO cartVO = new CartVO("157875196366160022",2);
         productSevice.decreaseStock(Arrays.asList(cartVO));*/
         //log.info();

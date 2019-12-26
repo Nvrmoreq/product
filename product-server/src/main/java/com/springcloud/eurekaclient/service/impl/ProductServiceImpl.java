@@ -57,19 +57,18 @@ public class ProductServiceImpl implements ProductSevice {
     public List<ProductInfoOutput> findByProductIdIn(List<String> productIdList) {
         return productInfoDao.findByProductIdIn(productIdList).stream().map(e -> {
             ProductInfoOutput output = new ProductInfoOutput();
-            BeanUtils.copyProperties(e,output);
+            BeanUtils.copyProperties(e, output);
             return output;
         }).collect(Collectors.toList());
     }
 
     @Override
-
     public void decreaseStock(List<DecreaseStockInput> decreaseStockInputList) {
         List<ProductInfo> productInfoList = decreaseStockProcess(decreaseStockInputList);
         //发送mq消息
         List<ProductInfoOutput> productInfoOutputList = productInfoList.stream().map(e -> {
             ProductInfoOutput output = new ProductInfoOutput();
-            BeanUtils.copyProperties(e,output);
+            BeanUtils.copyProperties(e, output);
             return output;
         }).collect(Collectors.toList());
         JsonFrom jsonFrom = new JsonFrom();
@@ -80,16 +79,16 @@ public class ProductServiceImpl implements ProductSevice {
     @Transactional
     public List<ProductInfo> decreaseStockProcess(List<DecreaseStockInput> decreaseStockInputList) {
         List<ProductInfo> productInfoList = new ArrayList<>();
-        for(DecreaseStockInput decreaseStockInput: decreaseStockInputList){
+        for (DecreaseStockInput decreaseStockInput : decreaseStockInputList) {
             //判断商品是否存在
             Optional<ProductInfo> productInfoOptional = productInfoDao.findById(decreaseStockInput.getProductId());
-            if(!productInfoOptional.isPresent()){
+            if (!productInfoOptional.isPresent()) {
                 throw new ProductionException(ResultEnum.PRODUCT_NOT_EXIST);
             }
             ProductInfo productInfo = productInfoOptional.get();
             //库存是否足够
-            Integer result = productInfo.getProductStock()-decreaseStockInput.getProductQuantity();
-            if(result < 0){
+            Integer result = productInfo.getProductStock() - decreaseStockInput.getProductQuantity();
+            if (result < 0) {
                 throw new ProductionException(ResultEnum.PRODUCT_STOCK_ERROR);
             }
             productInfo.setProductStock(result);

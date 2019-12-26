@@ -10,7 +10,7 @@ import java.util.List;
  * @Description:
  * @Date created in 13:40 2019/11/14
  */
-public interface ProductInfoDao extends JpaRepository<ProductInfo,String> {
+public interface ProductInfoDao extends JpaRepository<ProductInfo, String> {
 
     List<ProductInfo> findByProductStatus(Integer productStatus);
 
